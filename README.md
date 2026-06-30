@@ -1,59 +1,109 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# GES Boutique
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Application web de gestion de boutique développée avec **Laravel 13**. Elle permet de gérer les clients, les produits, les commandes et de générer des factures au format PDF.
 
-## About Laravel
+## Fonctionnalités
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Gestion des clients** : création, consultation, modification et suppression des fiches clients (nom, prénom, téléphone, adresse, email).
+- **Gestion des produits** : suivi du catalogue (référence, désignation, prix unitaire, stock, description).
+- **Gestion des commandes** : création de commandes liées à un client, avec lignes de commande (produit, quantité, prix unitaire).
+- **Facturation** : génération de factures liées aux commandes et export en PDF (via DomPDF).
+- **Tableau de bord** : vue d'ensemble avec le nombre de clients, produits et commandes.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack technique
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend** : PHP 8.3, Laravel 13
+- **Frontend** : Blade, Tailwind CSS 4, Vite
+- **Base de données** : SQLite (par défaut, configurable)
+- **PDF** : barryvdh/laravel-dompdf
+- **Tests** : PHPUnit
 
-## Learning Laravel
+## Prérequis
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP >= 8.3
+- Composer
+- Node.js & npm
+- Une base de données (SQLite par défaut, MySQL/PostgreSQL possible)
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+1. Cloner le dépôt
+   ```bash
+   git clone <url-du-repo>
+   cd ges_boutique
+   ```
 
-## Agentic Development
+2. Installer les dépendances PHP
+   ```bash
+   composer install
+   ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+3. Installer les dépendances front-end
+   ```bash
+   npm install
+   ```
 
-```bash
-composer require laravel/boost --dev
+4. Configurer l'environnement
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-php artisan boost:install
+5. Configurer la base de données dans `.env` (SQLite est utilisé par défaut, le fichier `database/database.sqlite` doit exister)
+   ```bash
+   touch database/database.sqlite
+   ```
+
+6. Lancer les migrations
+   ```bash
+   php artisan migrate
+   ```
+
+7. Compiler les assets et lancer le serveur
+   ```bash
+   npm run dev
+   php artisan serve
+   ```
+
+L'application sera accessible sur `http://localhost:8000`, redirigeant automatiquement vers le tableau de bord.
+
+## Structure du projet
+
+```
+app/
+├── Http/Controllers/   # ClientController, ProduitController, CommandeController, FactureController
+└── Models/             # Client, Produit, Commande, LigneCommande, Facture, User
+
+database/
+└── migrations/         # Schémas des tables clients, produits, commandes, lignes de commande, factures
+
+resources/views/
+├── clients/
+├── produits/
+├── commandes/
+├── factures/
+└── dashboard/
+
+routes/
+└── web.php             # Routes ressources (clients, produits, commandes) + génération PDF
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Routes principales
 
-## Contributing
+| Méthode | URI | Description |
+|---|---|---|
+| GET | `/dashboard` | Tableau de bord |
+| GET/POST | `/clients` | Liste / création des clients |
+| GET/POST | `/produits` | Liste / création des produits |
+| GET/POST | `/commandes` | Liste / création des commandes |
+| GET | `/facture/{id}/pdf` | Génération de la facture en PDF |
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Tests
 
-## Code of Conduct
+```bash
+php artisan test
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Licence
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# ges_boutique
+Ce projet est distribué sous licence MIT.
